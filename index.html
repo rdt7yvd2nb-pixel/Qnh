@@ -2,17 +2,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Private Access</title>
+<title>Private Message</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400&display=swap');
 
 body {
   margin: 0;
   overflow: hidden;
   font-family: 'Inter', sans-serif;
   color: white;
-  background: black;
+  background: radial-gradient(ellipse at bottom, #3a0ca3 0%, #000000 100%);
 }
 
 canvas {
@@ -24,23 +24,18 @@ canvas {
 
 .container {
   text-align: center;
-  max-width: 700px;
+  max-width: 750px;
   margin: auto;
-  margin-top: 15vh;
+  margin-top: 12vh;
   padding: 40px;
-  background: rgba(0,0,0,0.65);
-  backdrop-filter: blur(12px);
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(15px);
   border-radius: 20px;
 }
 
 h1 {
   font-family: 'Playfair Display', serif;
-  font-size: 30px;
-  margin-bottom: 10px;
-}
-
-p {
-  line-height: 1.8;
+  font-size: 32px;
 }
 
 input {
@@ -48,18 +43,16 @@ input {
   border-radius: 8px;
   border: none;
   margin-top: 15px;
-  font-size: 16px;
 }
 
 button {
   padding: 12px 20px;
   border-radius: 8px;
   border: none;
-  background: #ff4d6d;
+  background: #ff4da6;
   color: white;
   margin-left: 8px;
   cursor: pointer;
-  font-weight: 500;
 }
 
 button:hover {
@@ -71,8 +64,14 @@ button:hover {
 }
 
 #error {
-  color: #ff4d6d;
+  color: #ff4da6;
   margin-top: 10px;
+}
+
+#typedText {
+  white-space: pre-line;
+  line-height: 1.8;
+  margin-top: 20px;
 }
 </style>
 </head>
@@ -91,14 +90,7 @@ button:hover {
 
 <div class="container hidden" id="message">
   <h1>For You</h1>
-  <p>
-  Today was really special to me.<br><br>
-  After everything we shared, I know things between us aren’t simple anymore.<br><br>
-  There are certain parts of myself I only give when I truly trust someone and have genuine feelings.<br><br>
-  I don’t ever want to look back and feel like I was careless with my feelings.<br><br>
-  I need to know that what we shared won’t be taken lightly,  
-  and that it won’t leave me questioning what I mean to you.
-  </p>
+  <div id="typedText"></div>
 </div>
 
 <script>
@@ -109,12 +101,34 @@ function checkPassword() {
   if (input === correctPassword) {
     document.getElementById("login").classList.add("hidden");
     document.getElementById("message").classList.remove("hidden");
+    typeWriter();
   } else {
     document.getElementById("error").innerText = "Wrong password.";
   }
 }
 
-// Animated star background
+// Typing effect
+const text = `Today was really special to me.
+
+After everything we shared, I know things between us aren’t simple anymore.
+
+There are certain parts of myself I only give when I truly trust someone and have genuine feelings.
+
+I don’t ever want to look back and feel like I was careless with my feelings.
+
+I need to know that what we shared won’t be taken lightly,
+and that it won’t leave me questioning what I mean to you.`;
+
+let i = 0;
+function typeWriter() {
+  if (i < text.length) {
+    document.getElementById("typedText").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(typeWriter, 30);
+  }
+}
+
+// Galaxy + floating hearts
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 
@@ -122,21 +136,42 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let stars = [];
+let hearts = [];
 
 for (let i = 0; i < 120; i++) {
   stars.push({
     x: Math.random() * canvas.width,
     y: Math.random() * canvas.height,
-    radius: Math.random() * 1.5,
+    radius: Math.random() * 2,
     dx: (Math.random() - 0.5) * 0.3,
     dy: (Math.random() - 0.5) * 0.3
   });
 }
 
+for (let i = 0; i < 20; i++) {
+  hearts.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    size: 10 + Math.random() * 10,
+    speed: 0.3 + Math.random() * 0.5
+  });
+}
+
+function drawHeart(x, y, size) {
+  ctx.fillStyle = "rgba(255,105,180,0.8)";
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.bezierCurveTo(x - size/2, y - size/2, x - size, y + size/3, x, y + size);
+  ctx.bezierCurveTo(x + size, y + size/3, x + size/2, y - size/2, x, y);
+  ctx.fill();
+}
+
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "white";
+
+  // Stars
   stars.forEach(s => {
+    ctx.fillStyle = "white";
     ctx.beginPath();
     ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
     ctx.fill();
@@ -145,8 +180,20 @@ function animate() {
     if (s.x < 0 || s.x > canvas.width) s.dx *= -1;
     if (s.y < 0 || s.y > canvas.height) s.dy *= -1;
   });
+
+  // Floating hearts
+  hearts.forEach(h => {
+    drawHeart(h.x, h.y, h.size);
+    h.y -= h.speed;
+    if (h.y < -20) {
+      h.y = canvas.height + 20;
+      h.x = Math.random() * canvas.width;
+    }
+  });
+
   requestAnimationFrame(animate);
 }
+
 animate();
 </script>
 
