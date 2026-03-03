@@ -107,28 +107,28 @@ function checkPassword() {
   }
 }
 
-// Typing effect
-const text = `Today was really special to me.
+// ===== FULL LETTER (GIỮ NGUYÊN BẢN DÀI) =====
+const text = `I’ve been thinking a lot since today, and I feel like I need to say this properly instead of keeping it to myself.
 
-After everything we shared, I know things between us aren’t simple anymore.
+Today was really special to me. After everything we shared, I know things between us aren’t simple anymore. There are certain parts of myself I only give when I truly trust someone and when my feelings are real. What happened wasn’t light to me, and it wasn’t casual.
 
-There are certain parts of myself I only give when I truly trust someone and have genuine feelings.
+When I chose to open up to you and be with you in that way, I did it with trust, with vulnerability, and with seriousness. It meant something. And because it meant something, I can’t just move forward pretending it was just another moment.
 
-I don’t ever want to look back and feel like I was careless with my feelings.
+I don’t ever want to look back and feel like I was careless with my feelings. I need to know that what we shared won’t be taken lightly, and that it won’t leave me questioning what I mean to you.
 
-I need to know that what we shared won’t be taken lightly,
-and that it won’t leave me questioning what I mean to you.`;
+I’m not saying this to pressure you. I’m saying it because I value myself, and I value what we have. I just hope that we both understand the weight of what happened, and that it’s something we treat with the respect it deserves.`;
 
+// ===== Typing Effect =====
 let i = 0;
 function typeWriter() {
   if (i < text.length) {
     document.getElementById("typedText").innerHTML += text.charAt(i);
     i++;
-    setTimeout(typeWriter, 30);
+    setTimeout(typeWriter, 28);
   }
 }
 
-// Galaxy + floating hearts
+// ===== Galaxy + Floating Hearts =====
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 
@@ -169,7 +169,6 @@ function drawHeart(x, y, size) {
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Stars
   stars.forEach(s => {
     ctx.fillStyle = "white";
     ctx.beginPath();
@@ -181,7 +180,6 @@ function animate() {
     if (s.y < 0 || s.y > canvas.height) s.dy *= -1;
   });
 
-  // Floating hearts
   hearts.forEach(h => {
     drawHeart(h.x, h.y, h.size);
     h.y -= h.speed;
